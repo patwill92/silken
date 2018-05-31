@@ -1,0 +1,239 @@
+@import "variables.scss";
+
+@function getSide($type) {
+  @return map-get((
+    'b': bottom,
+    't':top,
+    'l':left,
+    'r':right
+  ), $type);
+}
+
+@function getScreen($screen) {
+  @return map-get((
+    'sm': $small-up,
+    'md': $medium-up,
+    'lg': $large-up
+  ), $screen);
+}
+
+@function getJustify($justify) {
+  @return map-get((
+    'center': 'center',
+    'space-between': 'between',
+    'space-around': 'around',
+    'flex-start': 'start',
+    'flex-end': 'end'
+  ), $justify);
+}
+
+@function getAlign($align) {
+  @return map-get((
+    'center': 'center',
+    'flex-start': 'start',
+    'flex-end': 'end',
+    'baseline': 'baseline',
+    'stretch': 'stretch'
+  ), $align);
+}
+
+@function getWeightNum($weight) {
+  @return map-get((
+    'light': 300,
+    'reg': 500,
+    'bold': 700,
+    'body': 500
+  ), $weight);
+}
+
+$params: ('margin', 'padding');
+$screens: ('sm', 'md', 'lg');
+$amounts: ('0', '5', '10', '15', '20', '30', '40', '50', '60', '70', '80');
+$sides: ('', 'b', 'l', 'r', 't');
+$sideGroups: ('tb', 'lr');
+$displays: ('none', 'hidden', 'block', 'inline-block', 'inline', 'flex', 'inline-flex');
+$justifies: ('center', 'space-between', 'space-around', 'flex-start', 'flex-end');
+$aligns: ('center', 'baseline', 'flex-start', 'flex-end', 'stretch');
+$sizes: ('11', '12', '14', '15', '18', '20', '30', '50', '70');
+$weights: ('light', 'reg', 'bold', 'body');
+$textAligns: ('left', 'right', 'center');
+
+@each $param in $params {
+  @each $side in $sides {
+    @each $amount in $amounts {
+      @if $side == '' {
+        .h-#{$param}-#{$amount} {
+          #{$param}: #{$amount}px !important;
+        }
+      } @else {
+        .h-#{$param}-#{$side}-#{$amount} {
+          #{$param}-#{getSide($side)}: #{$amount}px !important;
+        }
+      }
+    }
+  }
+}
+
+
+@each $param in $params {
+  @each $side in $sides {
+    @each $screen in $screens {
+      @each $amount in $amounts {
+        @if $side == '' {
+          .h-#{$param}-#{$screen}-#{$amount} {
+            @media #{getScreen($screen)} {
+              #{$param}: #{$amount}px !important;
+            }
+          }
+        } @else {
+          .h-#{$param}-#{$side}-#{$screen}-#{$amount} {
+            @media #{getScreen($screen)} {
+              #{$param}-#{getSide($side)}: #{$amount}px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@each $param in $params {
+  @each $side in $sideGroups {
+    @each $amount in $amounts {
+      .h-#{$param}-#{$side}-#{$amount} {
+        @if $side == 'lr' {
+          #{$param}-left: #{$amount}px !important;
+          #{$param}-right: #{$amount}px !important;
+        } @else {
+          #{$param}-top: #{$amount}px !important;
+          #{$param}-bottom: #{$amount}px !important;
+        }
+      }
+    }
+  }
+}
+
+@each $param in $params {
+  @each $side in $sideGroups {
+    @each $screen in $screens {
+      @each $amount in $amounts {
+        .h-#{$param}-#{$side}-#{$screen}-#{$amount} {
+          @if $side == 'lr' {
+            @media #{getScreen($screen)} {
+              #{$param}-left: #{$amount}px !important;
+              #{$param}-right: #{$amount}px !important;
+            }
+          } @else {
+            @media #{getScreen($screen)} {
+              #{$param}-top: #{$amount}px !important;
+              #{$param}-bottom: #{$amount}px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@each $display in $displays {
+  .h-display-#{$display} {
+    display: #{$display};
+  }
+}
+
+@each $screen in $screens {
+  @each $display in $displays {
+    .h-display-#{$screen}-#{$display} {
+      @media #{getScreen($screen)} {
+        display: #{$display} !important;
+      }
+    }
+  }
+}
+
+@each $justify in $justifies {
+  .h-justify-#{getJustify($justify)} {
+    justify-content: #{$justify};
+  }
+}
+
+//@each
+
+@each $screen in $screens {
+  @each $justify in $justifies {
+    .h-justify-#{$screen}-#{getJustify($justify)} {
+      @media #{getScreen($screen)} {
+        justify-content: #{$justify} !important;
+      }
+    }
+  }
+}
+
+@each $align in $aligns {
+  .h-align-#{getAlign($align)} {
+    align-items: #{$align};
+  }
+}
+
+//@each
+
+@each $screen in $screens {
+  @each $align in $aligns {
+    .h-align-#{$screen}-#{getAlign($align)} {
+      @media #{getScreen($screen)} {
+        align-items: #{$align} !important;
+      }
+    }
+  }
+}
+
+@each $size in $sizes {
+  .h-font-#{$size} {
+    font-size: #{$size}px !important;
+  }
+}
+
+//@each
+
+@each $screen in $screens {
+  @each $size in $sizes {
+    .h-font-#{$screen}-#{$size} {
+      @media #{getScreen($screen)} {
+        font-size: #{$size}px !important;
+      }
+    }
+  }
+}
+
+@each $weight in $weights {
+  .h-font-#{$weight} {
+    font-weight: getWeightNum($weight) !important;
+  }
+}
+
+@each $screen in $screens {
+  @each $weight in $weights {
+    .h-font-#{$screen}-#{$weight} {
+      @media #{getScreen($screen)} {
+        font-weight: getWeightNum($weight) !important;
+      }
+    }
+  }
+}
+
+@each $text in $textAligns {
+  .h-text-align-#{$text} {
+    text-align: #{$text};
+  }
+}
+
+
+@each $screen in $screens {
+  @each $text in $textAligns {
+    .h-text-align-#{$screen}-#{$text} {
+      @media #{getScreen($screen)} {
+        text-align: #{$text};
+      }
+    }
+  }
+}
